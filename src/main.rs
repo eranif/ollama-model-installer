@@ -214,9 +214,17 @@ where
     // 3️⃣ Write the data
     // -----------------------------------------------------------------
     file.write_all(content.as_ref())?;
-
+    // SYSTEM """You are an API endpoint that only responds with valid JSON objects. Do not include any extra prose or formatting."""
     // Add the common template
     const TEMPLATE_CONTENT: &str = r#"
+
+PARAMETER temperature 0.8
+PARAMETER num_ctx 10240
+
+SYSTEM """
+You are a helpful and friendly assistant. Your responses should be concise and easy to understand.
+"""
+
 # Define a flexible template for chat messages
 # This Go template iterates through the messages and formats them
 # according to the role.
