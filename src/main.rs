@@ -59,7 +59,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         Some(name) => name,
         None => derive_filename_from_url(&args.url)?,
     };
-    let out_path = args.directory.join(file_name);
+    let out_path = args.directory.join(&file_name);
 
     // -------------------------------------------------------------
     // Perform the HTTP GET request (streaming)
@@ -107,8 +107,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     )?;
 
     // Create a ModelFile.
-    let model_file = Path::new(&args.directory).join("ModelFile");
-    write_to_file(&model_file, format!("FROM {}", bin_file))?;
+    let model_file = Path::new(&args.directory).join("Modelfile");
+    write_to_file(&model_file, format!("FROM {}", file_name))?;
     info(
         stdout(),
         &format!("Successfully create file '{}'", model_file.display()),
@@ -122,6 +122,8 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     info(stdout(), &format!("Installing file {}...", bin_file))?;
 
     match Command::new(ollama_exec.display().to_string())
+        .arg("create")
+        .arg(&args.model_name)
         .arg("-f")
         .arg(model_file.display().to_string())
         .output()
