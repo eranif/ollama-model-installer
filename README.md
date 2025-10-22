@@ -1,11 +1,14 @@
 # Ollama Puller
 
-A lightweight, asynchronous command‑line utility written in Rust that downloads a file from a given URL and saves it into a directory of your choice. It streams the response directly to disk and provides a **progress bar** (or a spinner when the size is unknown) so you can monitor the download in real time.
+A lightweight, asynchronous command‑line utility written in Rust that downloads a LLM model file (usuallt from HuggingFace)
+saves it into a directory of your choice and installs it in `ollama`.
+
+It streams the response directly to disk and provides a **progress bar** (or a spinner when the size is unknown) so you can monitor the download in real time.
 
 ---
 
 ## ✨ Features
-- **Simple CLI**: `ollama-puller <URL> [directory] [--filename <NAME>]`
+- **Simple CLI**: `ollama-model-installer <URL> [directory] [--filename <NAME>]`
 - **Automatic directory creation** if the target folder does not exist.
 - **Smart filename handling** – derives a sensible name from the URL when none is provided.
 - **Live progress indicator** using the `indicatif` crate (percentage, elapsed time, ETA, etc.).
@@ -26,38 +29,35 @@ You can either **build from source** or **install the binary via Cargo**.
 ### Build from source
 ```bash
 # Clone the repository
-git clone <repo-url>
-cd ollama-puller
+git clone https://github.com/eranif/ollama-model-downloader.git
+cd ollama-model-installer
 
 # Build the release binary
 cargo build --release
 ```
-The compiled binary will be located at `target/release/ollama-puller`.
+The compiled binary will be located at `target/release/ollama-model-installer`.
 
 ### Install with Cargo (recommended)
 ```bash
-cargo install --git <repo-url> ollama-puller
+cargo install --git https://github.com/eranif/ollama-model-downloader.git ollama-model-installer
 ```
 This command fetches the latest version from the repository and installs the binary into `~/.cargo/bin`.
 
 ---
 
 ## 🚀 Usage
+
 ```bash
-# Basic download – saved in the current directory
-ollama-puller https://example.com/file.txt
-
-# Specify a target directory (created automatically if missing)
-ollama-puller https://example.com/file.txt ./downloads
-
 # Provide a custom filename for the saved file
-ollama-puller https://example.com/file.txt ./downloads --filename my_file.txt
+ollama-model-installer https://example.com/my-model-q4.gguf -d ./downloads --filename my-model.gguf
 ```
 
 ### Options
 | Flag | Description |
 |------|-------------|
-| `--filename <NAME>` | Override the filename derived from the URL. |
+| `-f, --filename <FILENAME>` | Name of the file to write inside `folder`. If omitted the program will derive a name from the URL |
+| `-d`, `--directory` `<NAME>` | Destination folder (will be created if it does not exist, default: `.`) |
+| `--model-name <NAME>` | The Model name. This name will appear when you run `ollama ls` |
 | `-h`, `--help` | Show help message and exit. |
 | `-V`, `--version` | Print version information. |
 
@@ -74,7 +74,7 @@ Downloaded 'https://example.com/file.txt' → './downloads/file.txt'
 ---
 
 ## 📦 Crate Features (for developers)
-If you plan to embed `ollama-puller` as a library, the crate exposes the following public API:
+If you plan to embed `ollama-model-installer` as a library, the crate exposes the following public API:
 - `download(url: &str, target_dir: &Path, filename: Option<&str>) -> Result<PathBuf>` – performs the download and returns the path to the saved file.
 - Customizable progress callbacks via the `indicatif` progress bar.
 
