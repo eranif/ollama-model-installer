@@ -5,6 +5,8 @@ saves it into a directory of your choice and installs it in `ollama`.
 
 It streams the response directly to disk and provides a **progress bar** (or a spinner when the size is unknown) so you can monitor the download in real time.
 
+![Feature demo](assets/ollama-model-installer.gif)
+
 ---
 
 ## ✨ Features
