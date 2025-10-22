@@ -1,0 +1,18 @@
+[package]
+name = "ollama-puller"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "ollama-puller"
+path = "src/main.rs"
+
+[dependencies]
+reqwest = { version = "0.12", features = ["json", "stream"] }
+tokio = { version = "1.38", features = ["full"] }
+clap = { version = "4.5", features = ["derive"] }
+chrono = "0.4"
+url = "2.5"
+futures-util = "0.3"
+indicatif = "0.17"
+ansi_term = "0.12"
