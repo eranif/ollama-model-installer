@@ -1,6 +1,6 @@
-# Ollama Puller
+# Ollama Model Installer
 
-A lightweight, asynchronous command‑line utility written in Rust that downloads a LLM model file (usuallt from HuggingFace)
+A lightweight, asynchronous command‑line utility written in Rust that downloads a LLM model file (usually from HuggingFace)
 saves it into a directory of your choice and installs it in `ollama`.
 
 It streams the response directly to disk and provides a **progress bar** (or a spinner when the size is unknown) so you can monitor the download in real time.
