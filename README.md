@@ -29,7 +29,7 @@ You can either **build from source** or **install the binary via Cargo**.
 ### Build from source
 ```bash
 # Clone the repository
-git clone https://github.com/eranif/ollama-model-downloader.git
+git clone https://github.com/eranif/ollama-model-installer.git
 cd ollama-model-installer
 
 # Build the release binary
@@ -39,7 +39,7 @@ The compiled binary will be located at `target/release/ollama-model-installer`.
 
 ### Install with Cargo (recommended)
 ```bash
-cargo install --git https://github.com/eranif/ollama-model-downloader.git ollama-model-installer
+cargo install --git https://github.com/eranif/ollama-model-installer.git ollama-model-installer
 ```
 This command fetches the latest version from the repository and installs the binary into `~/.cargo/bin`.
 
