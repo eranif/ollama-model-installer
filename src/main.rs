@@ -108,7 +108,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     // Create a ModelFile.
     let model_file = Path::new(&args.directory).join("Modelfile");
-    write_to_file(&model_file, format!("FROM {}", file_name))?;
+    write_model_file(&model_file, format!("FROM {}", file_name))?;
     info(
         stdout(),
         &format!("Successfully create file '{}'", model_file.display()),
@@ -186,7 +186,7 @@ fn derive_filename_from_url(url: &str) -> Result<String, Box<dyn std::error::Err
 /// # Ok(())
 /// # }
 /// ```
-pub fn write_to_file<P, C>(target_path: P, content: C) -> io::Result<PathBuf>
+pub fn write_model_file<P, C>(target_path: P, content: C) -> io::Result<PathBuf>
 where
     P: AsRef<Path>,
     C: AsRef<[u8]>,
@@ -214,6 +214,33 @@ where
     // 3️⃣ Write the data
     // -----------------------------------------------------------------
     file.write_all(content.as_ref())?;
+
+    // Add the common template
+    const TEMPLATE_CONTENT: &str = r#"
+# Define a flexible template for chat messages
+# This Go template iterates through the messages and formats them
+# according to the role.
+TEMPLATE """{{- if .System -}}<|im_start|>system
+{{ .System }}<|im_end|>
+{{- end -}}
+{{- range .Prompt -}}
+{{- if eq .Role "user" -}}<|im_start|>user
+{{ .Content }}<|im_end|>
+{{- else if eq .Role "assistant" -}}<|im_start|>assistant
+{{ .Content }}<|im_end|>
+{{- end -}}
+{{- end -}}
+{{- if .Response -}}<|im_start|>assistant
+{{ .Response }}<|im_end|>
+{{- end -}}"""
+
+# Set the chat template to use the custom TEMPLATE
+# This will handle the multi-message OpenAI style prompts
+CHAT_TEMPLATE "{{ .Template }}"
+
+"#;
+
+    file.write_all(TEMPLATE_CONTENT.as_bytes())?;
 
     // -----------------------------------------------------------------
     // 4️⃣ Flush to ensure everything is persisted on disk
