@@ -128,10 +128,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .arg(model_file.display().to_string())
         .output()
     {
-        Ok(o) if o.status.success() => info(
-            stdout(),
-            String::from_utf8_lossy(&o.stdout).to_string().as_str(),
-        )?,
+        Ok(o) if o.status.success() => {
+            info(stdout(), "Model installed successfully!")?;
+            info(stdout(), "")?;
+            info(
+                stdout(),
+                &format!(
+                    "You can now run 'ollama run {}' to try it",
+                    &args.model_name
+                ),
+            )?;
+        }
         Ok(o) => error(
             stderr(),
             format!(
