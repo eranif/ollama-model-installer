@@ -225,27 +225,6 @@ SYSTEM """
 You are a helpful and friendly assistant. Your responses should be concise and easy to understand.
 """
 
-# Define a flexible template for chat messages
-# This Go template iterates through the messages and formats them
-# according to the role.
-TEMPLATE """{{- if .System -}}<|im_start|>system
-{{ .System }}<|im_end|>
-{{- end -}}
-{{- range .Prompt -}}
-{{- if eq .Role "user" -}}<|im_start|>user
-{{ .Content }}<|im_end|>
-{{- else if eq .Role "assistant" -}}<|im_start|>assistant
-{{ .Content }}<|im_end|>
-{{- end -}}
-{{- end -}}
-{{- if .Response -}}<|im_start|>assistant
-{{ .Response }}<|im_end|>
-{{- end -}}"""
-
-# Set the chat template to use the custom TEMPLATE
-# This will handle the multi-message OpenAI style prompts
-CHAT_TEMPLATE "{{ .Template }}"
-
 "#;
 
     file.write_all(TEMPLATE_CONTENT.as_bytes())?;
